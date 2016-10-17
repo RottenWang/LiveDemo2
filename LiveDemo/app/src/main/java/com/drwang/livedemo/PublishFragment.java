@@ -93,7 +93,7 @@ public class PublishFragment extends Fragment implements SeekBar.OnSeekBarChange
 ///        mPushConfig.setWatermark(BitmapFactory.decodeResource(getResources(),R.drawable.watermark), 10, 10);
 //        mLivePusher.setConfig(mPushConfig);
         //推流地址
-        rtmpUrl = "rtmp://2000.livepush.myqcloud.com/live/2000_4eb4da7079af11e69776e435c87f075e?bizid=2000";
+        rtmpUrl = "rtmp://2000.livepush.myqcloud.com/live/2000_44c6e64e79af11e69776e435c87f075e?bizid=2000";
         Bitmap bitmap = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.pause_publish);
         mPushConfig.setPauseImg(bitmap);
     }
@@ -181,12 +181,12 @@ public class PublishFragment extends Fragment implements SeekBar.OnSeekBarChange
             @Override
             public void onClick(View v) {
                 if (mLivePusher != null) {
-                    if (mLivePusher.isPushing()){
-                        mCloudVideoView.setVisibility(View.GONE);
+                    if (isPushing){
                         mLivePusher.stopCameraPreview(true); //停止摄像头预览
                         mLivePusher.stopPusher();            //停止推流
                         mLivePusher.setPushListener(null);   //解绑 listener
                         mBtnPlay.setBackgroundResource(R.drawable.play_start);
+                        mCloudVideoView.setVisibility(View.GONE);
                     }else {
                         Log.i(TAG,"开始推流");
                         mCloudVideoView.setVisibility(View.VISIBLE);
@@ -195,6 +195,7 @@ public class PublishFragment extends Fragment implements SeekBar.OnSeekBarChange
                         mLivePusher.startCameraPreview(mCloudVideoView);
                         mBtnPlay.setBackgroundResource(R.drawable.play_pause);
                     }
+                    isPushing = !isPushing;
 
                 }
             }
@@ -210,6 +211,7 @@ public class PublishFragment extends Fragment implements SeekBar.OnSeekBarChange
         mSeekBarBeauty.setOnSeekBarChangeListener(this);
         mSeekBarWhitening.setOnSeekBarChangeListener(this);
     }
+    private boolean isPushing;
     private boolean isFaceBeautyVisiable;//美颜菜单是否可见
     private int mBeauty;//美白
     private int mWhitening;//美颜

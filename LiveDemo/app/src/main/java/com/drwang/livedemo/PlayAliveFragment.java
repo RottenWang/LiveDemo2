@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +45,7 @@ public class PlayAliveFragment extends Fragment implements ITXLivePlayListener, 
     private Button mBtnOrientation;
     private MainActivity mainActiviy;
     private Button mBtnRenderMode;
+    private Button mBtnChannel;
 
     @Nullable
     @Override
@@ -91,6 +93,8 @@ public class PlayAliveFragment extends Fragment implements ITXLivePlayListener, 
         mBtnOrientation = (Button) view.findViewById(R.id.btnOrientation);
         //填充模式
         mBtnRenderMode = (Button) view.findViewById(R.id.btnRenderMode);
+        //选择频道
+        mBtnChannel = (Button) view.findViewById(R.id.btnChannel);
     }
 
     private void initData() {
@@ -103,6 +107,12 @@ public class PlayAliveFragment extends Fragment implements ITXLivePlayListener, 
     private boolean isPorttait = true;// 是否是竖屏
     private int mRenderMode = TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION;
     private void initListener() {
+//        mBtnChannel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(mainActiviy, "敬请期待~", Toast.LENGTH_SHORT).show();
+//            }
+//        });
         //填充模式
         mBtnRenderMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,7 +203,6 @@ public class PlayAliveFragment extends Fragment implements ITXLivePlayListener, 
             }
         });
     }
-
     @Override
     public void onPlayEvent(int event, Bundle bundle) {
         if (event == TXLiveConstants.PLAY_ERR_NET_DISCONNECT) {
@@ -212,6 +221,18 @@ public class PlayAliveFragment extends Fragment implements ITXLivePlayListener, 
     @Override
     public void onNetStatus(Bundle bundle) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLivePlayer.resume();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mLivePlayer.pause();
     }
 
     @Override
@@ -246,5 +267,9 @@ public class PlayAliveFragment extends Fragment implements ITXLivePlayListener, 
         }
         mLlCacheStrategy.setVisibility(View.GONE);
         mLivePlayer.setConfig(mPlayConfig);
+    }
+    public void fullScrren(){
+        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getActivity().recreate();
     }
 }
